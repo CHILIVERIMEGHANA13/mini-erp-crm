@@ -223,33 +223,34 @@ export const InventoryPage: React.FC = () => {
                 const isLowStock = p.currentStock <= p.minStockAlert;
                 return (
                   <tr key={p.id}>
-                    <td style={{ fontWeight: 700, color: '#2563eb' }}>{p.sku}</td>
+                    <td style={{ fontWeight: 800, color: 'var(--primary)' }}>{p.sku}</td>
                     <td>
-                      <div style={{ fontWeight: 600, color: '#0f172a' }}>{p.name}</div>
+                      <div style={{ fontWeight: 600, color: 'var(--text-main)' }}>{p.name}</div>
                     </td>
                     <td>
-                      <span style={{ fontSize: '0.8125rem', color: '#475569' }}>{p.category}</span>
+                      <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{p.category}</span>
                     </td>
-                    <td style={{ fontWeight: 700 }}>₹{p.unitPrice.toLocaleString()}</td>
+                    <td style={{ fontWeight: 700, color: 'var(--text-main)' }}>₹{p.unitPrice.toLocaleString()}</td>
                     <td>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontWeight: 800, color: isLowStock ? '#dc2626' : '#059669', fontSize: '0.9375rem' }}>
+                        <span style={{ fontWeight: 800, color: isLowStock ? 'var(--accent-rose)' : 'var(--accent-emerald)', fontSize: '0.9375rem' }}>
                           {p.currentStock} units
                         </span>
                         {isLowStock && (
                           <span className="badge badge-cancelled" title={`Below alert min of ${p.minStockAlert}`}>
-                            <AlertTriangle size={12} style={{ marginRight: '3px' }} /> LOW
+                            <span className="badge-dot" />
+                            LOW
                           </span>
                         )}
                       </div>
-                      <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Min Alert: {p.minStockAlert}</div>
+                      <div style={{ fontSize: '0.725rem', color: 'var(--text-muted)' }}>Min Alert: {p.minStockAlert}</div>
                     </td>
-                    <td style={{ fontSize: '0.8125rem', color: '#475569' }}>{p.location}</td>
+                    <td style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{p.location}</td>
                     <td>
                       <div style={{ display: 'flex', gap: '8px' }}>
                         {canEdit && (
                           <>
-                            <button onClick={() => handleOpenAdjust(p)} className="btn btn-secondary btn-sm" style={{ color: '#2563eb' }}>
+                            <button onClick={() => handleOpenAdjust(p)} className="btn btn-secondary btn-sm" style={{ color: 'var(--primary)' }}>
                               Adjust Stock
                             </button>
                             <button onClick={() => handleOpenEdit(p)} className="btn btn-secondary btn-sm">
@@ -383,39 +384,39 @@ export const InventoryPage: React.FC = () => {
           <div className="modal-content" style={{ maxWidth: '480px' }}>
             <div className="modal-header">
               <div>
-                <h3>Stock Level Adjustment</h3>
-                <p style={{ fontSize: '0.8125rem', color: '#64748b' }}>{adjustingProduct.name} ({adjustingProduct.sku})</p>
+                <h3 style={{ color: 'var(--text-main)' }}>Stock Level Adjustment</h3>
+                <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{adjustingProduct.name} ({adjustingProduct.sku})</p>
               </div>
-              <button onClick={() => setAdjustingProduct(null)} style={{ border: 'none', background: 'none', cursor: 'pointer' }}>
+              <button onClick={() => setAdjustingProduct(null)} style={{ border: 'none', background: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
                 <X size={20} />
               </button>
             </div>
 
             <form onSubmit={handleSaveAdjustment}>
-              <div style={{ background: '#f8fafc', padding: '12px', borderRadius: '8px', marginBottom: '16px', fontSize: '0.875rem' }}>
-                Current Stock on Hand: <strong>{adjustingProduct.currentStock} units</strong>
+              <div style={{ background: 'rgba(0,0,0,0.2)', padding: '12px', borderRadius: '10px', marginBottom: '16px', fontSize: '0.875rem', border: '1px solid var(--border-color)' }}>
+                Current Stock on Hand: <strong style={{ color: 'var(--primary)' }}>{adjustingProduct.currentStock} units</strong>
               </div>
 
               <div className="form-group">
                 <label className="form-label">Movement Type *</label>
                 <div style={{ display: 'flex', gap: '12px' }}>
-                  <label style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px', padding: '10px', border: '1px solid #e2e8f0', borderRadius: '8px', cursor: 'pointer', background: adjustData.movementType === 'IN' ? '#dcfce7' : '#fff' }}>
+                  <label style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px', padding: '12px', border: '1px solid var(--border-color)', borderRadius: '10px', cursor: 'pointer', background: adjustData.movementType === 'IN' ? 'rgba(16, 185, 129, 0.15)' : 'var(--input-bg)' }}>
                     <input
                       type="radio"
                       name="movType"
                       checked={adjustData.movementType === 'IN'}
                       onChange={() => setAdjustData({ ...adjustData, movementType: 'IN' })}
                     />
-                    <ArrowDownRight size={16} color="#166534" /> <strong>Stock IN</strong>
+                    <ArrowDownRight size={16} style={{ color: 'var(--accent-emerald)' }} /> <strong>Stock IN</strong>
                   </label>
-                  <label style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px', padding: '10px', border: '1px solid #e2e8f0', borderRadius: '8px', cursor: 'pointer', background: adjustData.movementType === 'OUT' ? '#ffe4e6' : '#fff' }}>
+                  <label style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px', padding: '12px', border: '1px solid var(--border-color)', borderRadius: '10px', cursor: 'pointer', background: adjustData.movementType === 'OUT' ? 'rgba(244, 63, 94, 0.15)' : 'var(--input-bg)' }}>
                     <input
                       type="radio"
                       name="movType"
                       checked={adjustData.movementType === 'OUT'}
                       onChange={() => setAdjustData({ ...adjustData, movementType: 'OUT' })}
                     />
-                    <ArrowUpRight size={16} color="#991b1b" /> <strong>Stock OUT</strong>
+                    <ArrowUpRight size={16} style={{ color: 'var(--accent-rose)' }} /> <strong>Stock OUT</strong>
                   </label>
                 </div>
               </div>

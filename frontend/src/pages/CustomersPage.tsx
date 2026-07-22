@@ -212,33 +212,34 @@ export const CustomersPage: React.FC = () => {
               customers.map((c) => (
                 <tr key={c.id}>
                   <td>
-                    <div style={{ fontWeight: 700, color: '#0f172a' }}>{c.businessName}</div>
-                    <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                    <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>{c.businessName}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                       {c.gstNumber ? `GST: ${c.gstNumber}` : 'No GST provided'}
                     </div>
                   </td>
                   <td>
                     <div style={{ fontWeight: 600 }}>{c.name}</div>
-                    <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{c.mobile} • {c.email}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{c.mobile} • {c.email}</div>
                   </td>
                   <td>
-                    <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#475569' }}>
+                    <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-muted)' }}>
                       {c.type}
                     </span>
                   </td>
                   <td>
                     <span className={`badge badge-${c.status.toLowerCase()}`}>
+                      <span className="badge-dot" />
                       {c.status}
                     </span>
                   </td>
                   <td>
                     {c.followUpDate ? (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.8125rem', color: '#2563eb', fontWeight: 600 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.8125rem', color: 'var(--primary)', fontWeight: 600 }}>
                         <Calendar size={14} />
                         {c.followUpDate}
                       </div>
                     ) : (
-                      <span style={{ color: '#94a3b8', fontSize: '0.8125rem' }}>None</span>
+                      <span style={{ color: 'var(--text-muted)', fontSize: '0.8125rem' }}>None</span>
                     )}
                   </td>
                   <td>
@@ -413,40 +414,41 @@ export const CustomersPage: React.FC = () => {
           <div className="modal-content" style={{ maxWidth: '700px' }}>
             <div className="modal-header">
               <div>
-                <h3 style={{ fontSize: '1.25rem', color: '#0f172a' }}>{selectedCustomer.businessName}</h3>
+                <h3 style={{ fontSize: '1.25rem', color: 'var(--text-main)' }}>{selectedCustomer.businessName}</h3>
                 <span className={`badge badge-${selectedCustomer.status.toLowerCase()}`} style={{ marginTop: '4px' }}>
+                  <span className="badge-dot" />
                   {selectedCustomer.status} • {selectedCustomer.type}
                 </span>
               </div>
-              <button onClick={() => setSelectedCustomer(null)} style={{ border: 'none', background: 'none', cursor: 'pointer' }}>
+              <button onClick={() => setSelectedCustomer(null)} style={{ border: 'none', background: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
                 <X size={20} />
               </button>
             </div>
 
-            <div className="grid-cols-2" style={{ marginBottom: '20px', background: '#f8fafc', padding: '16px', borderRadius: '8px' }}>
+            <div className="grid-cols-2" style={{ marginBottom: '20px', background: 'rgba(0, 0, 0, 0.2)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
               <div>
-                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Contact Person</div>
-                <div style={{ fontWeight: 700, color: '#0f172a' }}>{selectedCustomer.name}</div>
-                <div style={{ fontSize: '0.8125rem', color: '#475569' }}>📞 {selectedCustomer.mobile}</div>
-                <div style={{ fontSize: '0.8125rem', color: '#475569' }}>✉️ {selectedCustomer.email}</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Contact Person</div>
+                <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>{selectedCustomer.name}</div>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>📞 {selectedCustomer.mobile}</div>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>✉️ {selectedCustomer.email}</div>
               </div>
               <div>
-                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>GSTIN Number</div>
-                <div style={{ fontWeight: 700, color: '#0f172a' }}>{selectedCustomer.gstNumber || 'N/A'}</div>
-                <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '6px' }}>Address</div>
-                <div style={{ fontSize: '0.8125rem', color: '#475569' }}>{selectedCustomer.address}</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>GSTIN Number</div>
+                <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>{selectedCustomer.gstNumber || 'N/A'}</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '6px' }}>Address</div>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{selectedCustomer.address}</div>
               </div>
             </div>
 
             {/* Follow-Up Timeline Section */}
             <div style={{ marginTop: '24px' }}>
-              <h4 style={{ fontSize: '1rem', color: '#0f172a', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <MessageSquarePlus size={18} color="#2563eb" /> CRM Follow-Up Timeline & Notes
+              <h4 style={{ fontSize: '1rem', color: 'var(--text-main)', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <MessageSquarePlus size={18} style={{ color: 'var(--primary)' }} /> CRM Follow-Up Timeline & Notes
               </h4>
 
               {canEdit && (
-                <form onSubmit={handleAddNote} style={{ marginBottom: '20px', background: '#ffffff', border: '1px solid #e2e8f0', padding: '12px', borderRadius: '8px' }}>
-                  <div className="form-group" style={{ marginBottom: '8px' }}>
+                <form onSubmit={handleAddNote} style={{ marginBottom: '20px', background: 'var(--input-bg)', border: '1px solid var(--border-color)', padding: '14px', borderRadius: '12px' }}>
+                  <div className="form-group" style={{ marginBottom: '10px' }}>
                     <textarea
                       className="form-textarea"
                       rows={2}
@@ -458,7 +460,7 @@ export const CustomersPage: React.FC = () => {
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Next Follow-Up Date:</span>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Next Follow-Up Date:</span>
                       <input
                         type="date"
                         className="form-input"
@@ -476,15 +478,15 @@ export const CustomersPage: React.FC = () => {
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '240px', overflowY: 'auto' }}>
                 {selectedCustomer.customerNotes?.length === 0 ? (
-                  <div style={{ fontSize: '0.875rem', color: '#94a3b8', textAlign: 'center', padding: '12px' }}>No notes logged yet.</div>
+                  <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)', textAlign: 'center', padding: '12px' }}>No notes logged yet.</div>
                 ) : (
                   selectedCustomer.customerNotes?.map((note: CustomerNote) => (
-                    <div key={note.id} style={{ background: '#f1f5f9', padding: '12px', borderRadius: '8px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#64748b', marginBottom: '4px' }}>
-                        <span style={{ fontWeight: 700, color: '#334155' }}>{note.createdBy}</span>
+                    <div key={note.id} style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid var(--border-color)', padding: '12px', borderRadius: '10px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                        <span style={{ fontWeight: 700, color: 'var(--primary)' }}>{note.createdBy}</span>
                         <span>{new Date(note.createdAt).toLocaleString()}</span>
                       </div>
-                      <div style={{ fontSize: '0.875rem', color: '#0f172a' }}>{note.note}</div>
+                      <div style={{ fontSize: '0.875rem', color: 'var(--text-main)' }}>{note.note}</div>
                     </div>
                   ))
                 )}

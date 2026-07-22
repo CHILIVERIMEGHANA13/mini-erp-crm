@@ -197,21 +197,22 @@ export const ChallansPage: React.FC = () => {
             ) : (
               challans.map((ch) => (
                 <tr key={ch.id}>
-                  <td style={{ fontWeight: 800, color: '#2563eb' }}>{ch.challanNumber}</td>
+                  <td style={{ fontWeight: 800, color: 'var(--primary)' }}>{ch.challanNumber}</td>
                   <td>
-                    <div style={{ fontWeight: 700, color: '#0f172a' }}>
+                    <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>
                       {ch.customerSnapshot?.businessName || ch.customerSnapshot?.name}
                     </div>
-                    <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{ch.customerSnapshot?.email}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{ch.customerSnapshot?.email}</div>
                   </td>
                   <td style={{ fontWeight: 600 }}>{ch.totalQuantity} units</td>
-                  <td style={{ fontWeight: 800 }}>₹{ch.totalAmount.toLocaleString()}</td>
+                  <td style={{ fontWeight: 800, color: 'var(--text-main)' }}>₹{ch.totalAmount.toLocaleString()}</td>
                   <td>
                     <span className={`badge badge-${ch.status.toLowerCase()}`}>
+                      <span className="badge-dot" />
                       {ch.status}
                     </span>
                   </td>
-                  <td style={{ fontSize: '0.8125rem', color: '#64748b' }}>
+                  <td style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
                     {new Date(ch.createdAt).toLocaleDateString()}
                   </td>
                   <td>
@@ -219,7 +220,7 @@ export const ChallansPage: React.FC = () => {
                       <button onClick={() => setSelectedChallan(ch)} className="btn btn-secondary btn-sm">
                         View Detail
                       </button>
-                      <button onClick={() => generateChallanPDF(ch)} className="btn btn-secondary btn-sm" style={{ color: '#059669' }}>
+                      <button onClick={() => generateChallanPDF(ch)} className="btn btn-secondary btn-sm" style={{ color: 'var(--accent-emerald)' }}>
                         <Download size={14} /> PDF Invoice
                       </button>
                     </div>
@@ -356,27 +357,28 @@ export const ChallansPage: React.FC = () => {
           <div className="modal-content" style={{ maxWidth: '700px' }}>
             <div className="modal-header">
               <div>
-                <h3 style={{ fontSize: '1.25rem', color: '#2563eb' }}>{selectedChallan.challanNumber}</h3>
+                <h3 style={{ fontSize: '1.25rem', color: 'var(--primary)' }}>{selectedChallan.challanNumber}</h3>
                 <span className={`badge badge-${selectedChallan.status.toLowerCase()}`}>
+                  <span className="badge-dot" />
                   {selectedChallan.status}
                 </span>
               </div>
-              <button onClick={() => setSelectedChallan(null)} style={{ border: 'none', background: 'none', cursor: 'pointer' }}>
+              <button onClick={() => setSelectedChallan(null)} style={{ border: 'none', background: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
                 <X size={20} />
               </button>
             </div>
 
-            <div className="grid-cols-2" style={{ background: '#f8fafc', padding: '16px', borderRadius: '8px', marginBottom: '20px' }}>
+            <div className="grid-cols-2" style={{ background: 'rgba(0,0,0,0.2)', padding: '16px', borderRadius: '12px', marginBottom: '20px', border: '1px solid var(--border-color)' }}>
               <div>
-                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Billed Customer</div>
-                <div style={{ fontWeight: 700, color: '#0f172a' }}>{selectedChallan.customerSnapshot.businessName}</div>
-                <div style={{ fontSize: '0.8125rem', color: '#475569' }}>{selectedChallan.customerSnapshot.name}</div>
-                <div style={{ fontSize: '0.8125rem', color: '#475569' }}>{selectedChallan.customerSnapshot.mobile}</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Billed Customer</div>
+                <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>{selectedChallan.customerSnapshot.businessName}</div>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{selectedChallan.customerSnapshot.name}</div>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>{selectedChallan.customerSnapshot.mobile}</div>
               </div>
               <div>
-                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Challan Info</div>
-                <div style={{ fontSize: '0.8125rem', color: '#334155' }}>Created By: <strong>{selectedChallan.createdBy}</strong></div>
-                <div style={{ fontSize: '0.8125rem', color: '#334155' }}>Date: <strong>{new Date(selectedChallan.createdAt).toLocaleString()}</strong></div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Challan Info</div>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--text-main)' }}>Created By: <strong>{selectedChallan.createdBy}</strong></div>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--text-main)' }}>Date: <strong>{new Date(selectedChallan.createdAt).toLocaleString()}</strong></div>
               </div>
             </div>
 

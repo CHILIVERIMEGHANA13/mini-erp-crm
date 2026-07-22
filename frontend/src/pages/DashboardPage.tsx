@@ -40,21 +40,21 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ setActiveTab }) =>
   };
 
   if (loading) {
-    return <div style={{ padding: '24px', color: '#64748b' }}>Loading dashboard summary...</div>;
+    return <div style={{ padding: '28px', color: 'var(--text-muted)' }}>Loading operational metrics...</div>;
   }
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
         <div>
-          <h1 className="page-title">Operations Overview</h1>
-          <p className="page-subtitle">Welcome back, {user?.name}. Here is your enterprise summary.</p>
+          <h1 className="page-title">Operations Control Center</h1>
+          <p className="page-subtitle">Welcome back, {user?.name}. Here is your live enterprise summary.</p>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div style={{ display: 'flex', gap: '12px' }}>
           {['ADMIN', 'SALES'].includes(user?.role || '') && (
             <button onClick={() => setActiveTab('challans')} className="btn btn-primary">
-              <Plus size={16} /> New Sales Challan
+              <Plus size={18} /> New Sales Challan
             </button>
           )}
         </div>
@@ -63,57 +63,67 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ setActiveTab }) =>
       {/* Low Stock Warning Alert Banner */}
       {lowStockProducts.length > 0 && (
         <div className="alert-banner alert-warning">
-          <AlertTriangle size={20} />
-          <div>
-            <strong>Low Inventory Warning:</strong> {lowStockProducts.length} product(s) have stock levels below their minimum alert threshold!
+          <AlertTriangle size={22} className="pulse-icon" />
+          <div style={{ flex: 1 }}>
+            <strong style={{ color: 'var(--accent-amber)', fontWeight: 800 }}>Low Inventory Alert:</strong>{' '}
+            {lowStockProducts.length} product(s) are below safety threshold levels!
             <button
               onClick={() => setActiveTab('inventory')}
-              style={{ marginLeft: '12px', background: 'none', border: 'none', color: '#92400e', textDecoration: 'underline', cursor: 'pointer', fontWeight: 700 }}
+              style={{
+                marginLeft: '14px',
+                background: 'none',
+                border: 'none',
+                color: 'var(--accent-amber)',
+                textDecoration: 'underline',
+                cursor: 'pointer',
+                fontWeight: 800,
+                fontSize: '0.875rem',
+              }}
             >
-              View Inventory Alert List →
+              Resolve Inventory Alerts →
             </button>
           </div>
         </div>
       )}
 
       {/* Metrics Row */}
-      <div className="grid-cols-4" style={{ marginBottom: '24px' }}>
+      <div className="grid-cols-4" style={{ marginBottom: '28px' }}>
         <MetricsCard
           title="TOTAL REVENUE"
           value={`₹${(stats?.totalRevenue || 0).toLocaleString()}`}
-          subtitle="Confirmed Challans"
+          subtitle="Confirmed Sales Challans"
           icon={IndianRupee}
-          color="#059669"
+          color="var(--accent-emerald)"
         />
         <MetricsCard
           title="ACTIVE CUSTOMERS"
           value={stats?.activeCustomers || 0}
-          subtitle={`Out of ${stats?.totalCustomers || 0} Total`}
+          subtitle={`Out of ${stats?.totalCustomers || 0} Total Leads`}
           icon={Users}
-          color="#2563eb"
+          color="var(--primary)"
         />
         <MetricsCard
-          title="INVENTORY ITEMS"
+          title="INVENTORY CATALOG"
           value={stats?.totalProducts || 0}
           subtitle={`${stats?.lowStockProducts || 0} Low Stock Alerts`}
           icon={Package}
-          color="#7c3aed"
+          color="var(--accent-purple)"
         />
         <MetricsCard
           title="TOTAL CHALLANS"
           value={stats?.totalChallans || 0}
-          subtitle={`${stats?.confirmedChallans || 0} Confirmed`}
+          subtitle={`${stats?.confirmedChallans || 0} Dispatched & Confirmed`}
           icon={FileText}
-          color="#d97706"
+          color="var(--accent-amber)"
         />
       </div>
 
       {/* Main Grid: Recent Challans & Low Stock Alert List */}
       <div className="grid-cols-2">
-        {/* Recent Challans */}
+        {/* Recent Challans Card */}
         <div className="card">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <h3 style={{ fontSize: '1.1rem', color: '#0f172a' }}>Recent Sales Challans</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+            <h3 style={{ fontSize: '1.15rem', color: 'var(--text-main)' }}>Recent Sales Challans</h3>
             <button onClick={() => setActiveTab('challans')} className="btn btn-secondary btn-sm">
               View All <ArrowUpRight size={14} />
             </button>
@@ -132,16 +142,17 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ setActiveTab }) =>
               <tbody>
                 {recentChallans.length === 0 ? (
                   <tr>
-                    <td colSpan={4} style={{ textAlign: 'center', color: '#94a3b8' }}>No challans generated yet.</td>
+                    <td colSpan={4} style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '24px' }}>No challans generated yet.</td>
                   </tr>
                 ) : (
                   recentChallans.map((ch) => (
                     <tr key={ch.id}>
-                      <td style={{ fontWeight: 700, color: '#2563eb' }}>{ch.challanNumber}</td>
-                      <td>{ch.customerSnapshot?.businessName || ch.customerSnapshot?.name}</td>
-                      <td style={{ fontWeight: 600 }}>₹{ch.totalAmount.toLocaleString()}</td>
+                      <td style={{ fontWeight: 800, color: 'var(--primary)' }}>{ch.challanNumber}</td>
+                      <td style={{ fontWeight: 600 }}>{ch.customerSnapshot?.businessName || ch.customerSnapshot?.name}</td>
+                      <td style={{ fontWeight: 700, color: 'var(--text-main)' }}>₹{ch.totalAmount.toLocaleString()}</td>
                       <td>
                         <span className={`badge badge-${ch.status.toLowerCase()}`}>
+                          <span className="badge-dot" />
                           {ch.status}
                         </span>
                       </td>
@@ -155,8 +166,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ setActiveTab }) =>
 
         {/* Low Stock Items Alert Card */}
         <div className="card">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <h3 style={{ fontSize: '1.1rem', color: '#0f172a' }}>Low Stock Inventory Alerts</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+            <h3 style={{ fontSize: '1.15rem', color: 'var(--text-main)' }}>Low Stock Stock List</h3>
             <button onClick={() => setActiveTab('inventory')} className="btn btn-secondary btn-sm">
               Manage Stock <ArrowUpRight size={14} />
             </button>
@@ -168,25 +179,25 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ setActiveTab }) =>
                 <tr>
                   <th>SKU</th>
                   <th>Product Name</th>
-                  <th>Current Stock</th>
+                  <th>Stock</th>
                   <th>Min Alert</th>
                 </tr>
               </thead>
               <tbody>
                 {lowStockProducts.length === 0 ? (
                   <tr>
-                    <td colSpan={4} style={{ textAlign: 'center', color: '#10b981', fontWeight: 600 }}>
-                      <CheckCircle size={16} style={{ display: 'inline', marginRight: '6px' }} />
+                    <td colSpan={4} style={{ textAlign: 'center', color: 'var(--accent-emerald)', fontWeight: 700, padding: '24px' }}>
+                      <CheckCircle size={18} style={{ display: 'inline', marginRight: '8px', verticalAlign: 'middle' }} />
                       All inventory stock levels are healthy!
                     </td>
                   </tr>
                 ) : (
                   lowStockProducts.map((p) => (
                     <tr key={p.id}>
-                      <td style={{ fontWeight: 600 }}>{p.sku}</td>
-                      <td>{p.name}</td>
-                      <td style={{ color: '#dc2626', fontWeight: 800 }}>{p.currentStock} units</td>
-                      <td style={{ color: '#64748b' }}>{p.minStockAlert} units</td>
+                      <td style={{ fontWeight: 700, color: 'var(--text-muted)' }}>{p.sku}</td>
+                      <td style={{ fontWeight: 600 }}>{p.name}</td>
+                      <td style={{ color: 'var(--accent-rose)', fontWeight: 800 }}>{p.currentStock} units</td>
+                      <td style={{ color: 'var(--text-muted)' }}>{p.minStockAlert} units</td>
                     </tr>
                   ))
                 )}
