@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LoginPage } from './pages/LoginPage';
 import { Navbar } from './components/Navbar';
@@ -10,14 +10,6 @@ import { ChallansPage } from './pages/ChallansPage';
 const MainApp: React.FC = () => {
   const { user, loading } = useAuth();
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('apex_erp_theme') || 'cyber-obsidian';
-  });
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('apex_erp_theme', theme);
-  }, [theme]);
 
   if (loading) {
     return (
@@ -40,7 +32,7 @@ const MainApp: React.FC = () => {
           animation: 'spin 1s linear infinite',
           marginBottom: '16px',
         }} />
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 800 }}>Initializing Apex Command Canvas...</h2>
+        <h2 style={{ fontSize: '1.25rem', fontWeight: 800 }}>Loading your workspace...</h2>
       </div>
     );
   }
@@ -51,15 +43,11 @@ const MainApp: React.FC = () => {
 
   return (
     <div className="app-container">
-      {/* Floating Executive Command Dock Header */}
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        currentTheme={theme}
-        onThemeChange={setTheme}
       />
 
-      {/* Full-Width Canvas Workspace */}
       <main className="main-canvas">
         {activeTab === 'dashboard' && <DashboardPage setActiveTab={setActiveTab} />}
         {activeTab === 'customers' && <CustomersPage />}
