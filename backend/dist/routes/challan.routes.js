@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const challan_controller_1 = require("../controllers/challan.controller");
+const auth_middleware_1 = require("../middleware/auth.middleware");
+const router = (0, express_1.Router)();
+router.use(auth_middleware_1.authenticateToken);
+router.get('/', challan_controller_1.getChallans);
+router.get('/:id', challan_controller_1.getChallanById);
+router.post('/', (0, auth_middleware_1.requireRole)(['ADMIN', 'SALES']), challan_controller_1.createChallan);
+router.patch('/:id/status', (0, auth_middleware_1.requireRole)(['ADMIN', 'SALES', 'ACCOUNTS']), challan_controller_1.updateChallanStatus);
+exports.default = router;
