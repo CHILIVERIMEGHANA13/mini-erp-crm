@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { UserRole } from '../types';
-import { LogOut, Palette, Shield, User } from 'lucide-react';
+import { LayoutDashboard, Users, Package, FileText, Hexagon, Palette, Shield, LogOut } from 'lucide-react';
 
 interface NavbarProps {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
   currentTheme?: string;
   onThemeChange?: (theme: string) => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ currentTheme = 'cyber-obsidian', onThemeChange }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  activeTab,
+  setActiveTab,
+  currentTheme = 'cyber-obsidian',
+  onThemeChange,
+}) => {
   const { user, logout, quickSwitchRole } = useAuth();
   const [activeTheme, setActiveTheme] = useState(currentTheme);
 
@@ -18,12 +25,12 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTheme = 'cyber-obsidian',
 
   if (!user) return null;
 
-  const roleBadgeClass: Record<UserRole, string> = {
-    ADMIN: 'badge-admin',
-    SALES: 'badge-sales',
-    WAREHOUSE: 'badge-warehouse',
-    ACCOUNTS: 'badge-accounts',
-  };
+  const navItems = [
+    { id: 'dashboard', label: 'Overview', icon: LayoutDashboard },
+    { id: 'customers', label: 'Customer CRM', icon: Users },
+    { id: 'inventory', label: 'Products & Stock', icon: Package },
+    { id: 'challans', label: 'Sales Challans', icon: FileText },
+  ];
 
   const themes = [
     { id: 'cyber-obsidian', label: 'Cyber', icon: '🌌' },
@@ -42,52 +49,119 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTheme = 'cyber-obsidian',
     }
   };
 
+  const roleBadgeClass: Record<UserRole, string> = {
+    ADMIN: 'badge-admin',
+    SALES: 'badge-sales',
+    WAREHOUSE: 'badge-warehouse',
+    ACCOUNTS: 'badge-accounts',
+  };
+
   return (
-    <header className="top-navbar">
-      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-        <h3 style={{ fontSize: '1.05rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
-          Mini ERP & CRM
-        </h3>
-        <span className={`badge ${roleBadgeClass[user.role]}`}>
-          <span className="badge-dot" />
-          {user.role} ROLE
-        </span>
+    <header className="floating-command-dock">
+      {/* Brand Identity */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{
+          width: '38px',
+          height: '38px',
+          borderRadius: '12px',
+          background: 'linear-gradient(135deg, var(--primary), var(--accent-cyan))',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#ffffff',
+          boxShadow: 'var(--primary-glow)',
+        }}>
+          <Hexagon size={22} />
+        </div>
+        <div>
+          <div style={{
+            fontFamily: 'var(--font-heading)',
+            fontWeight: 900,
+            fontSize: '1.1rem',
+            letterSpacing: '-0.03em',
+            color: 'var(--text-main)',
+            lineHeight: 1.1,
+          }}>
+            APEX
+          </div>
+          <div style={{ fontSize: '0.6875rem', color: 'var(--accent-emerald)', fontWeight: 700 }}>
+            ● OPERATIONS
+          </div>
+        </div>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-        {/* Dynamic Theme Engine Switcher */}
+      {/* Floating Center Navigation Tabs */}
+      <nav style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        background: 'rgba(0, 0, 0, 0.25)',
+        padding: '5px',
+        borderRadius: '14px',
+        border: '1px solid var(--border-color)',
+      }}>
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = activeTab === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              style={{
+                border: 'none',
+                background: isActive ? 'var(--primary)' : 'transparent',
+                color: isActive ? '#ffffff' : 'var(--text-muted)',
+                padding: '8px 16px',
+                borderRadius: '10px',
+                fontSize: '0.85rem',
+                fontWeight: isActive ? 700 : 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                boxShadow: isActive ? 'var(--primary-glow)' : 'none',
+              }}
+            >
+              <Icon size={16} />
+              <span>{item.label}</span>
+            </button>
+          );
+        })}
+      </nav>
+
+      {/* Right Action Controls: Theme Switcher + Role + User */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        {/* Attire Engine */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '6px',
-          background: 'rgba(255, 255, 255, 0.05)',
-          padding: '4px 8px',
+          gap: '4px',
+          background: 'rgba(255, 255, 255, 0.04)',
+          padding: '3px 6px',
           borderRadius: '10px',
           border: '1px solid var(--border-color)',
         }}>
-          <Palette size={14} style={{ color: 'var(--primary)' }} />
-          <span style={{ fontSize: '0.725rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            Attire:
-          </span>
+          <Palette size={14} style={{ color: 'var(--primary)', marginLeft: '4px' }} />
           {themes.map((t) => (
             <button
               key={t.id}
               onClick={() => handleThemeSelect(t.id)}
               style={{
                 border: 'none',
-                background: activeTheme === t.id ? 'var(--primary)' : 'transparent',
-                color: activeTheme === t.id ? '#ffffff' : 'var(--text-muted)',
+                background: activeTheme === t.id ? 'var(--primary-light)' : 'transparent',
+                color: activeTheme === t.id ? 'var(--primary)' : 'var(--text-muted)',
+                outline: activeTheme === t.id ? '1px solid var(--primary)' : 'none',
                 padding: '3px 8px',
                 borderRadius: '6px',
-                fontSize: '0.75rem',
-                fontWeight: 600,
+                fontSize: '0.725rem',
+                fontWeight: 700,
                 cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                boxShadow: activeTheme === t.id ? 'var(--primary-glow)' : 'none',
+                transition: 'all 0.15s ease',
               }}
-              title={`Switch to ${t.label} theme`}
+              title={`Switch layout theme to ${t.label}`}
             >
-              <span style={{ marginRight: '4px' }}>{t.icon}</span>
+              <span style={{ marginRight: '3px' }}>{t.icon}</span>
               {t.label}
             </button>
           ))}
@@ -97,28 +171,24 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTheme = 'cyber-obsidian',
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '6px',
+          gap: '4px',
           background: 'rgba(255, 255, 255, 0.04)',
-          padding: '4px 8px',
+          padding: '3px 6px',
           borderRadius: '10px',
           border: '1px solid var(--border-color)',
         }}>
-          <Shield size={14} style={{ color: 'var(--accent-cyan)' }} />
-          <span style={{ fontSize: '0.725rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            Role:
-          </span>
+          <Shield size={14} style={{ color: 'var(--accent-cyan)', marginLeft: '4px' }} />
           {(['ADMIN', 'SALES', 'WAREHOUSE', 'ACCOUNTS'] as UserRole[]).map((r) => (
             <button
               key={r}
               onClick={() => quickSwitchRole(r)}
               style={{
                 border: 'none',
-                background: user.role === r ? 'var(--primary-light)' : 'transparent',
-                color: user.role === r ? 'var(--primary)' : 'var(--text-muted)',
-                outline: user.role === r ? '1px solid var(--primary)' : 'none',
+                background: user.role === r ? 'var(--primary)' : 'transparent',
+                color: user.role === r ? '#ffffff' : 'var(--text-muted)',
                 padding: '3px 8px',
                 borderRadius: '6px',
-                fontSize: '0.725rem',
+                fontSize: '0.7rem',
                 fontWeight: 700,
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
@@ -129,27 +199,12 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTheme = 'cyber-obsidian',
           ))}
         </div>
 
-        {/* User Profile Info */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingLeft: '8px', borderLeft: '1px solid var(--border-color)' }}>
-          <div style={{
-            width: '34px',
-            height: '34px',
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, var(--primary), var(--accent-cyan))',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#fff',
-            fontWeight: 800,
-            fontSize: '0.85rem',
-            boxShadow: 'var(--primary-glow)',
-          }}>
-            {user.name.charAt(0).toUpperCase()}
-          </div>
-          <div style={{ textAlign: 'left' }}>
-            <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-main)', lineHeight: 1.2 }}>{user.name}</div>
-            <div style={{ fontSize: '0.725rem', color: 'var(--text-muted)' }}>{user.email}</div>
-          </div>
+        {/* Profile Chip & Logout */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span className={`badge ${roleBadgeClass[user.role]}`}>
+            <span className="badge-dot" />
+            {user.role}
+          </span>
           <button
             onClick={logout}
             className="btn btn-secondary btn-sm"

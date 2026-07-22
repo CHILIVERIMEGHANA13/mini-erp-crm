@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LoginPage } from './pages/LoginPage';
 import { Navbar } from './components/Navbar';
-import { Sidebar } from './components/Sidebar';
 import { DashboardPage } from './pages/DashboardPage';
 import { CustomersPage } from './pages/CustomersPage';
 import { InventoryPage } from './pages/InventoryPage';
@@ -33,15 +32,15 @@ const MainApp: React.FC = () => {
         fontFamily: 'var(--font-heading)',
       }}>
         <div style={{
-          width: '50px',
-          height: '50px',
+          width: '52px',
+          height: '52px',
           borderRadius: '50%',
           border: '3px solid var(--border-color)',
           borderTopColor: 'var(--primary)',
           animation: 'spin 1s linear infinite',
           marginBottom: '16px',
         }} />
-        <h2 style={{ fontSize: '1.2rem', fontWeight: 700 }}>Initializing Apex Operations Hub...</h2>
+        <h2 style={{ fontSize: '1.25rem', fontWeight: 800 }}>Initializing Apex Command Canvas...</h2>
       </div>
     );
   }
@@ -52,16 +51,21 @@ const MainApp: React.FC = () => {
 
   return (
     <div className="app-container">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <div className="main-content">
-        <Navbar currentTheme={theme} onThemeChange={setTheme} />
-        <main className="page-body">
-          {activeTab === 'dashboard' && <DashboardPage setActiveTab={setActiveTab} />}
-          {activeTab === 'customers' && <CustomersPage />}
-          {activeTab === 'inventory' && <InventoryPage />}
-          {activeTab === 'challans' && <ChallansPage />}
-        </main>
-      </div>
+      {/* Floating Executive Command Dock Header */}
+      <Navbar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        currentTheme={theme}
+        onThemeChange={setTheme}
+      />
+
+      {/* Full-Width Canvas Workspace */}
+      <main className="main-canvas">
+        {activeTab === 'dashboard' && <DashboardPage setActiveTab={setActiveTab} />}
+        {activeTab === 'customers' && <CustomersPage />}
+        {activeTab === 'inventory' && <InventoryPage />}
+        {activeTab === 'challans' && <ChallansPage />}
+      </main>
     </div>
   );
 };
